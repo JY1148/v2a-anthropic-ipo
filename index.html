@@ -1,0 +1,802 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="Anthropic营收、成本、算力承诺、IPO与治理结构可视化分析">
+<title>Anthropic 上市与财务拆解</title>
+<style>
+:root{--bg:#f2f1eb;--paper:#fffefa;--ink:#202923;--muted:#66716b;--line:#dce2da;--green:#176d52;--deep:#153d32;--mint:#a9d6bd;--lime:#d9f36a;--orange:#f1a466;--red:#be544c;--blue:#4b8399}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.6 Inter,-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif}a{color:var(--green);text-underline-offset:3px}.wrap{max-width:1140px;margin:auto;padding:26px 22px 60px}.hero{background:var(--deep);color:white;border-radius:28px;padding:40px 44px;position:relative;overflow:hidden}.hero:after{content:"A";position:absolute;right:24px;top:-100px;font-size:350px;font-weight:900;color:#ffffff0c}.eyebrow,.kicker{font-size:11px;letter-spacing:.13em;text-transform:uppercase;font-weight:800;color:#bcd9cb}.hero h1{font-size:clamp(34px,5.5vw,58px);line-height:1.05;letter-spacing:-.05em;margin:14px 0}.hero p{max-width:760px;color:#d6e5dd;margin:0}.status{display:inline-block;background:var(--lime);color:#20362c;padding:7px 13px;border-radius:99px;font-size:13px;font-weight:850;margin-top:20px}.meta{font-size:12px;color:#b9cfc3;margin-top:14px}
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:18px 0 34px}.kpi,.panel{background:var(--paper);border:1px solid var(--line);border-radius:18px;box-shadow:0 5px 20px #152d2010}.kpi{padding:17px 19px}.kpi .label{font-size:12px;color:var(--muted);font-weight:700}.kpi strong{display:block;font-size:clamp(24px,3vw,34px);line-height:1.2;letter-spacing:-.04em;margin:7px 0}.kpi small{font-size:11px;color:var(--muted)}
+section{margin-top:34px}.secthead{display:flex;align-items:end;justify-content:space-between;gap:18px;margin:0 2px 13px}.secthead h2{font-size:25px;letter-spacing:-.04em;margin:0}.secthead p{font-size:12px;color:var(--muted);margin:0}.grid{display:grid;grid-template-columns:1.2fr .8fr;gap:14px}.panel{padding:22px}.panel h3{font-size:17px;margin:0 0 7px}.sub{font-size:12px;color:var(--muted)}.chart-title{display:flex;justify-content:space-between;gap:12px;align-items:center;margin-bottom:8px}.chart-title b{font-size:14px}.legend{display:flex;gap:12px;flex-wrap:wrap;color:var(--muted);font-size:11px}.dot{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:5px;background:var(--green)}.dot.mint{background:var(--mint)}.dot.orange{background:var(--orange)}svg{width:100%;height:auto;display:block}.axis{fill:#78837b;font-size:11px}.value{fill:#24352c;font-size:12px;font-weight:800}.quarter{fill:#647068;font-size:10px}.gridline{stroke:#e5e9e3;stroke-width:1}.revbar{fill:var(--green)}.revbar.old{fill:var(--mint)}.growth-line{fill:none;stroke:var(--orange);stroke-width:3}.point{fill:var(--orange);stroke:#fffefa;stroke-width:2}
+.callout{border-left:4px solid var(--lime);background:#f4f8e6;border-radius:0 12px 12px 0;padding:11px 14px;margin-top:14px;font-size:13px}.callout.orange{border-color:var(--orange);background:#fff4e9}.callout.blue{border-color:#83b6c9;background:#eef7fa}.big-number{font-size:36px;font-weight:850;letter-spacing:-.05em;color:var(--deep);margin:5px 0}.mini{font-size:12px;color:var(--muted)}
+.compare{display:grid;gap:18px;margin-top:12px}.comp-row{display:grid;grid-template-columns:135px 1fr 65px;align-items:center;gap:12px;font-size:13px}.comp-label{font-weight:700}.scale{height:26px;background:#edf0ea;border-radius:7px;position:relative;overflow:hidden}.fill{height:100%;border-radius:7px;background:var(--green)}.fill.orange{background:var(--orange)}.fill.mint{background:var(--mint)}.comp-value{text-align:right;font-weight:850;font-variant-numeric:tabular-nums}.scale-note{display:flex;justify-content:space-between;color:var(--muted);font-size:10px;margin:-12px 78px 0 147px}
+.cash-layout{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px}.cashbox{background:#f5f6f1;border-radius:14px;padding:15px}.cashbox b{font-size:22px;display:block;letter-spacing:-.04em}.cashbox span{font-size:12px;color:var(--muted)}.valuation{display:flex;height:30px;border-radius:9px;overflow:hidden;margin:12px 0 8px}.valuation .fair{width:90.7%;background:var(--orange)}.valuation .rest{width:9.3%;background:#d5ded7}.key{display:flex;gap:12px;flex-wrap:wrap;font-size:11px;color:var(--muted)}
+.commit-total{display:flex;align-items:baseline;gap:12px}.commit-total strong{font-size:36px;letter-spacing:-.04em}.commit-total span{font-size:12px;color:var(--muted)}.splitbar{height:40px;border-radius:10px;display:flex;overflow:hidden;margin:16px 0 9px}.splitbar .before{width:50.1%;background:var(--green);color:white}.splitbar .after{width:49.9%;background:#d8e3da;color:#33463b}.splitbar span{display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800}.timeline{position:relative;margin:20px 0 0;padding:6px 0}.timeline:before{content:"";position:absolute;left:18px;top:10px;bottom:10px;width:2px;background:#c9d5cc}.event{position:relative;padding:0 0 18px 48px}.event:last-child{padding-bottom:0}.event:before{content:"";position:absolute;left:10px;top:5px;width:18px;height:18px;border-radius:50%;background:var(--lime);border:3px solid var(--deep)}.event time{display:block;font-size:12px;color:var(--green);font-weight:850}.event p{font-size:13px;margin:2px 0 0}.pill{display:inline-block;background:#edf3ed;color:#2d634a;padding:4px 9px;border-radius:99px;font-size:11px;font-weight:800}.pill.warn{background:#fff0e2;color:#935224}.pill.red{background:#f9e8e5;color:#9e4239}
+.capital-flow{display:grid;grid-template-columns:1fr 40px 1fr;align-items:center;gap:7px;margin-top:14px}.flowbox{padding:15px;border-radius:14px;background:#f1f5ef}.flowbox b{display:block;font-size:17px}.arrow{text-align:center;color:var(--green);font-size:24px;font-weight:900}.flowbox small{font-size:11px;color:var(--muted)}
+.video-ref{display:inline-flex;align-items:center;gap:6px;background:#f8eee8;color:#8a482a;border-radius:99px;padding:5px 10px;font-size:11px;font-weight:800;text-decoration:none}.video-ref:hover{background:#f1dfd4}.frame-head{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:13px}.frame-label{font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);font-weight:800}.frame{background:#1c2923;color:white;border-radius:15px;padding:17px;position:relative;overflow:hidden;min-height:130px}.frame:before{content:"VIDEO FRAME · RECONSTRUCTED";position:absolute;right:12px;top:9px;font-size:8px;letter-spacing:.11em;color:#ffffff8a}.frame-title{font-size:15px;font-weight:850;margin:12px 0 15px}.frame-nodes{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;align-items:center}.frame-node{background:#30443a;border:1px solid #52685b;border-radius:10px;padding:11px 8px;text-align:center;font-size:12px;font-weight:800}.frame-node small{display:block;color:#c3d1c8;font-size:10px;font-weight:500;margin-top:3px}.frame-arrow{text-align:center;color:var(--lime);font-size:20px;font-weight:900}.class-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:9px;margin-top:14px}.class-card{border:1px solid var(--line);border-radius:13px;padding:12px;background:#fff}.class-card .class-tag{font-size:18px;font-weight:900;color:var(--deep)}.class-card b{display:block;font-size:12px;margin:3px 0}.class-card p{font-size:11px;line-height:1.45;color:var(--muted);margin:0}.control-split{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:14px}.control-box{border-radius:14px;padding:15px;background:#eff5ef}.control-box.f{background:#fff2e5}.control-box strong{display:block;font-size:20px;color:var(--deep)}.control-box p{font-size:12px;color:var(--muted);margin:4px 0 0}.contract-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:11px;margin-top:14px}.contract-card{border:1px solid var(--line);border-radius:14px;padding:15px;background:#fff}.contract-card h4{font-size:14px;margin:0 0 7px}.contract-card p{font-size:12px;color:var(--muted);margin:0 0 8px}.contract-card .tag{font-size:10px;font-weight:850;color:var(--green);background:#edf5ee;border-radius:99px;padding:4px 8px;display:inline-block}.contract-card .tag.orange{color:#8b5125;background:#fff0df}.relation-table{width:100%;border-collapse:collapse;margin-top:12px;font-size:12px}.relation-table th,.relation-table td{padding:10px 9px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}.relation-table th{color:var(--muted);font-size:10px;text-transform:uppercase;letter-spacing:.07em}.relation-table td:first-child{font-weight:850;white-space:nowrap}.diagram-caption{font-size:11px;color:var(--muted);margin-top:8px}
+.claim{display:grid;grid-template-columns:1fr 150px 1.5fr;gap:13px;padding:13px 0;border-bottom:1px solid var(--line);font-size:13px}.claim:last-child{border:0}.claim .evidence{color:var(--muted)}.sources{display:grid;grid-template-columns:1fr 1fr;gap:8px 20px;margin-top:12px}.sources a{font-size:12px}.footer{border-top:1px solid var(--line);margin-top:38px;padding:20px 2px;color:var(--muted);font-size:11px}
+@media(max-width:800px){.kpis{grid-template-columns:repeat(2,1fr)}.grid{grid-template-columns:1fr}.secthead{display:block}.secthead p{margin-top:4px}.claim{grid-template-columns:1fr;gap:5px}.hero{padding:30px 25px}}
+@media(max-width:700px){.class-grid{grid-template-columns:repeat(2,1fr)}.contract-grid{grid-template-columns:1fr}.relation-table{font-size:11px}.relation-table th,.relation-table td{padding:8px 5px}}
+@media(max-width:500px){.wrap{padding:12px 11px 36px}.kpi{padding:14px}.panel{padding:17px}.comp-row{grid-template-columns:95px 1fr 52px;gap:7px;font-size:11px}.scale-note{margin-left:102px;margin-right:60px}.cash-layout,.control-split{grid-template-columns:1fr}.hero:after{font-size:220px;right:-15px;top:-50px}.sources{grid-template-columns:1fr}.frame-nodes{grid-template-columns:1fr}.frame-arrow{transform:rotate(90deg)}}
+
+.workspace{margin-top:30px}.workspace-note{border-left:4px solid var(--orange);background:#fff4e9;border-radius:0 12px 12px 0;padding:12px 15px;font-size:13px;margin:12px 0 16px}.workspace-layout{display:grid;grid-template-columns:1.35fr .65fr;gap:14px}.workspace-toolbar{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0}.workspace-btn{border:1px solid #cbd8ce;background:#f4f7f2;color:#234636;border-radius:9px;padding:9px 12px;font:inherit;font-size:12px;font-weight:700;cursor:pointer}.workspace-btn.primary{background:var(--deep);color:white;border-color:var(--deep)}.workspace-btn.danger{color:#97433b}.workspace-btn:hover{filter:brightness(.97)}.workspace-status{font-size:11px;color:var(--muted);margin-left:auto;align-self:center}.transcript-area{width:100%;min-height:480px;resize:vertical;padding:15px;border:1px solid var(--line);border-radius:12px;background:#fffefa;color:var(--ink);font:13px/1.75 ui-monospace,SFMono-Regular,Menlo,monospace}.transcript-area:focus,.comment-input:focus{outline:2px solid #a9d6bd;border-color:var(--green)}.workspace-help{font-size:11px;color:var(--muted);margin:5px 0 0}.comment-composer{padding:14px;background:#f3f6f0;border-radius:12px;margin-top:12px}.quote-box{font-size:12px;color:#52645a;background:white;border-left:3px solid var(--orange);padding:9px 11px;margin:0 0 10px;max-height:100px;overflow:auto;white-space:pre-wrap}.comment-input{width:100%;min-height:90px;padding:11px;border:1px solid var(--line);border-radius:10px;font:inherit;font-size:13px;line-height:1.6;resize:vertical}.comment-input:focus{outline:2px solid #a9d6bd;border-color:var(--green)}.comment-list{display:grid;gap:10px;margin-top:12px}.comment-item{border:1px solid var(--line);border-radius:12px;padding:12px;background:#fff}.comment-item blockquote{font-size:11px;color:#52645a;border-left:3px solid var(--mint);padding-left:9px;margin:0 0 8px;white-space:pre-wrap}.comment-item p{font-size:13px;margin:0 0 9px;white-space:pre-wrap}.comment-actions{display:flex;gap:7px;flex-wrap:wrap}.comment-actions button{font-size:10px;padding:5px 8px}.empty-comments{border:1px dashed #cbd6cc;border-radius:12px;padding:22px;text-align:center;color:var(--muted);font-size:12px}.workspace-count{font-size:12px;color:var(--muted)}.workspace-count b{color:var(--deep)}.source-file{display:none}
+@media(max-width:800px){.workspace-layout{grid-template-columns:1fr}.transcript-area{min-height:360px}}
+
+
+.chapter-nav{display:flex;gap:7px;overflow-x:auto;padding:2px 0 12px}.chapter-nav .workspace-btn{white-space:nowrap}.transcript-scroll{max-height:980px;overflow:auto;border:1px solid var(--line);border-radius:14px;background:#fffefa}.transcript-reader{white-space:pre-wrap;overflow-wrap:anywhere;padding:25px 26px;color:#25342b;font:15px/1.9 Inter,-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;user-select:text;-webkit-user-select:text}.transcript-chapter-title{font-size:1.22em;font-weight:900;color:var(--deep);letter-spacing:.02em}.transcript-image-placeholder{display:inline-block;color:#69776e;background:#edf1eb;border:1px dashed #bfccc1;border-radius:5px;padding:0 5px;font-size:.88em}.annotation-highlight{background:#ffed9b;border-radius:3px;box-shadow:0 0 0 1px #edcf62;cursor:pointer}.annotation-highlight:hover{background:#ffe16b}.selection-comment-btn{display:none;position:fixed;z-index:10000;box-shadow:0 7px 22px #10271c33}.comment-composer{padding:14px;background:#f3f6f0;border-radius:12px;margin:12px 0}.quote-box{font-size:12px;color:#52645a;background:white;border-left:3px solid var(--orange);padding:9px 11px;margin:8px 0 10px;max-height:150px;overflow:auto;white-space:pre-wrap}.comment-item{scroll-margin:20px}.comment-item.active{border-color:var(--orange);box-shadow:0 0 0 2px #f1a46655}.transcript-scroll:focus{outline:2px solid #a9d6bd}@media(max-width:800px){.transcript-reader{padding:18px;font-size:14px}.transcript-scroll{max-height:75vh}.workspace-layout{grid-template-columns:1fr}}
+
+
+.chapter-nav{display:flex;gap:7px;overflow-x:auto;padding:2px 0 12px}.chapter-nav .workspace-btn{white-space:nowrap}.transcript-scroll{max-height:980px;overflow:auto;border:1px solid var(--line);border-radius:14px;background:#fffefa}.transcript-reader{white-space:pre-wrap;overflow-wrap:anywhere;padding:25px 26px;color:#25342b;font:15px/1.9 Inter,-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;user-select:text;-webkit-user-select:text}.transcript-chapter-title{font-size:1.22em;font-weight:900;color:var(--deep);letter-spacing:.02em}.transcript-image-placeholder{display:inline-block;color:#69776e;background:#edf1eb;border:1px dashed #bfccc1;border-radius:5px;padding:0 5px;font-size:.88em}.annotation-highlight{background:#ffed9b;border-radius:3px;box-shadow:0 0 0 1px #edcf62;cursor:pointer}.annotation-highlight:hover{background:#ffe16b}.selection-comment-btn{display:none;position:fixed;z-index:10000;box-shadow:0 7px 22px #10271c33}.comment-composer{padding:14px;background:#f3f6f0;border-radius:12px;margin:12px 0}.quote-box{font-size:12px;color:#52645a;background:white;border-left:3px solid var(--orange);padding:9px 11px;margin:8px 0 10px;max-height:150px;overflow:auto;white-space:pre-wrap}.comment-item{scroll-margin:20px}.comment-item.active{border-color:var(--orange);box-shadow:0 0 0 2px #f1a46655}.transcript-scroll:focus{outline:2px solid #a9d6bd}@media(max-width:800px){.transcript-reader{padding:18px;font-size:14px}.transcript-scroll{max-height:75vh}.workspace-layout{grid-template-columns:1fr}}
+
+
+.tab-nav{display:flex;gap:8px;padding:8px;background:#e5e9e1;border-radius:14px;margin:0 0 18px;position:sticky;top:8px;z-index:20;backdrop-filter:blur(10px)}.tab-btn{border:0;background:transparent;color:#46544b;padding:11px 17px;border-radius:10px;font:inherit;font-size:14px;font-weight:800;cursor:pointer}.tab-btn.active{background:var(--deep);color:#fff}.tab-panel[hidden]{display:none!important}.chart-bars{display:grid;gap:11px;margin-top:14px}.chart-bar-row{display:grid;grid-template-columns:155px 1fr minmax(70px,auto);gap:10px;align-items:center;font-size:12px}.chart-bar-label{font-weight:750}.chart-track{height:25px;border-radius:7px;background:#edf0ea;overflow:hidden}.chart-bar{height:100%;border-radius:7px;background:var(--green);min-width:2px}.chart-bar.orange{background:var(--orange)}.chart-bar.blue{background:var(--blue)}.chart-bar.mint{background:var(--mint)}.chart-num{text-align:right;font-weight:850;font-variant-numeric:tabular-nums}.stacked{height:36px;display:flex;overflow:hidden;border-radius:9px;margin:12px 0 8px}.stacked span{display:flex;align-items:center;justify-content:center;color:#fff;font-size:10px;font-weight:850;white-space:nowrap;min-width:2px}.stacked .s1{background:#176d52}.stacked .s2{background:#4b8399}.stacked .s3{background:#f1a466}.stacked .s4{background:#263e55}.stacked .s5{background:#89988d}.data-table-wrap{overflow:auto}.data-table{width:100%;border-collapse:collapse;font-size:12px}.data-table th,.data-table td{padding:9px 8px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}.data-table th{font-size:10px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted)}.data-table td:first-child{font-weight:800;white-space:nowrap}.source-note{font-size:11px;color:var(--muted);margin-top:10px}.highlight-stat{display:flex;gap:12px;align-items:baseline;flex-wrap:wrap}.highlight-stat strong{font-size:25px;color:var(--deep)}.badge-note{display:inline-block;background:#f2f4ef;padding:5px 9px;border-radius:8px;font-size:11px;color:#536158}.tab-anchor{scroll-margin-top:70px}
+@media(max-width:760px){.tab-nav{top:4px}.tab-btn{flex:1;padding:10px 8px}.chart-bar-row{grid-template-columns:105px 1fr 66px;gap:7px;font-size:11px}.stacked span{font-size:8px}.data-table{min-width:720px}}
+</style>
+</head>
+<body><main class="wrap">
+<nav class="tab-nav" aria-label="页面内容导航"><button class="tab-btn active" type="button" data-tab="analysis-panel">财报分析</button><button class="tab-btn" type="button" data-tab="transcript-panel">视频逐字稿与评论</button></nav>
+<div class="tab-panel" id="analysis-panel">
+<header class="hero">
+<div class="eyebrow">公司财务 · IPO · 治理结构</div>
+<h1>Anthropic<br>增长与上市拆解</h1>
+<p>把视频字幕里的重点说法，与 SEC 招股书及公司披露交叉核对。图表优先呈现变化幅度、成本关系和时间顺序；文字只保留读图所需的解释。</p>
+<div class="status">IPO 已定价 $83 · 预计 11 月 19 日以 ANT 开始交易</div>
+<div class="meta">资料截点：2026 年 11 月 18 日（美国太平洋时间） · 金额为美元 · B = 十亿美元</div>
+</header>
+<div class="kpis">
+<div class="kpi"><div class="label">2025 全年营收</div><strong>$4.585B</strong><small>2024 年为 $386M</small></div>
+<div class="kpi"><div class="label">2026 前九个月营收</div><strong>$33.2B</strong><small>已约为 2025 全年 7.2 倍</small></div>
+<div class="kpi"><div class="label">Q3’26 年化营收运行率</div><strong>~$81B</strong><small>近期收入年化，不等于实际全年营收</small></div>
+<div class="kpi"><div class="label">多年算力与租赁承诺</div><strong>~$900.9B</strong><small>多年期总承诺，不是当前现金欠款</small></div>
+</div>
+
+<section>
+<div class="secthead"><h2>01 / 营收增长</h2><p>季度营收 + 年同比增长趋势</p></div>
+<div class="grid">
+<div class="panel">
+<div class="chart-title"><b>季度营收与增长速度</b><span class="sub">十亿美元；增长线为同比倍数</span></div>
+<div class="legend"><span><i class="dot mint"></i>2025 营收</span><span><i class="dot"></i>2026 营收</span><span><i class="dot orange"></i>同比增速</span></div>
+<svg viewBox="0 0 720 310" role="img" aria-label="Anthropic季度营收增长图">
+<line class="gridline" x1="54" y1="250" x2="690" y2="250"/><line class="gridline" x1="54" y1="190" x2="690" y2="190"/><line class="gridline" x1="54" y1="130" x2="690" y2="130"/><line class="gridline" x1="54" y1="70" x2="690" y2="70"/>
+<text class="axis" x="20" y="254">0</text><text class="axis" x="15" y="194">5</text><text class="axis" x="10" y="134">10</text><text class="axis" x="10" y="74">15</text>
+<rect class="revbar old" x="78" y="245" width="48" height="5"/><rect class="revbar old" x="166" y="240" width="48" height="10"/><rect class="revbar old" x="254" y="233" width="48" height="17"/><rect class="revbar old" x="342" y="226" width="48" height="24"/>
+<rect class="revbar" x="430" y="194" width="48" height="56"/><rect class="revbar" x="518" y="111" width="48" height="139"/><rect class="revbar" x="606" y="46" width="48" height="204"/>
+<text class="value" x="89" y="236">0.4</text><text class="value" x="177" y="231">0.8</text><text class="value" x="265" y="224">1.4</text><text class="value" x="353" y="217">2.0</text><text class="value" x="441" y="185">4.7</text><text class="value" x="529" y="102">11.6</text><text class="value" x="617" y="37">17.0</text>
+<polyline class="growth-line" points="102,221 190,208 278,190 366,174 454,147 542,120 630,91"/>
+<circle class="point" cx="102" cy="221" r="5"/><circle class="point" cx="190" cy="208" r="5"/><circle class="point" cx="278" cy="190" r="5"/><circle class="point" cx="366" cy="174" r="5"/><circle class="point" cx="454" cy="147" r="5"/><circle class="point" cx="542" cy="120" r="5"/><circle class="point" cx="630" cy="91" r="5"/>
+<text class="quarter" x="81" y="273">25 Q1</text><text class="quarter" x="169" y="273">25 Q2</text><text class="quarter" x="257" y="273">25 Q3</text><text class="quarter" x="345" y="273">25 Q4</text><text class="quarter" x="433" y="273">26 Q1</text><text class="quarter" x="521" y="273">26 Q2</text><text class="quarter" x="609" y="273">26 Q3</text>
+<text class="axis" x="548" y="24">Q3’26 同比 &gt;12x</text></svg>
+<div class="callout"><b>读图：</b>季度营收从 2025 Q1 的约 $0.4B 增至 2026 Q3 的 $17.0B。用量计费约占 2026 前九个月收入的 79%，订阅约占 21%。</div>
+</div>
+<div class="panel">
+<div class="chart-title"><b>年度与期间收入</b><span class="sub">不同长度期间，请勿直接年化比较</span></div>
+<div class="compare">
+<div class="comp-row"><span class="comp-label">2023 全年</span><div class="scale"><div class="fill mint" style="width:1%"></div></div><span class="comp-value">0.041</span></div>
+<div class="comp-row"><span class="comp-label">2024 全年</span><div class="scale"><div class="fill mint" style="width:1.2%"></div></div><span class="comp-value">0.386</span></div>
+<div class="comp-row"><span class="comp-label">2025 全年</span><div class="scale"><div class="fill" style="width:13.8%"></div></div><span class="comp-value">4.585</span></div>
+<div class="comp-row"><span class="comp-label">2026 前九月</span><div class="scale"><div class="fill" style="width:100%"></div></div><span class="comp-value">33.2</span></div>
+</div>
+<div class="callout blue">截至 Q3’26，公司披露 11,900 多家客户过去 12 个月支出至少 $100K；Q3 年化运行率约 $81B，是最近收入速度的年化指标，不是公司已赚得的全年营收或未来承诺。</div>
+</div>
+</div>
+</section>
+
+<section>
+<div class="secthead"><h2>02 / 收入、算力成本与亏损</h2><p>把经营趋势与会计估值影响分开看</p></div>
+<div class="grid">
+<div class="panel">
+<div class="chart-title"><b>算力与基础设施费用 / 营收</b><span class="sub">同一横轴：0–180%</span></div>
+<div class="compare">
+<div class="comp-row"><span class="comp-label">2025 全年</span><div class="scale"><div class="fill orange" style="width:88.9%"></div></div><span class="comp-value">160%</span></div>
+<div class="comp-row"><span class="comp-label">2026 前九月</span><div class="scale"><div class="fill" style="width:31.7%"></div></div><span class="comp-value">57%</span></div>
+</div><div class="scale-note"><span>0%</span><span>180%</span></div>
+<div class="cash-layout">
+<div class="cashbox"><b>$7.3B</b><span>2025 全年算力及基础设施费用</span></div>
+<div class="cashbox"><b>$18.8B</b><span>2026 前九个月；收入为 $33.2B</span></div>
+</div>
+<p class="mini">2025 成本高于收入；2026 前九个月成本占比下降，但绝对支出仍快速增加。</p>
+</div>
+<div class="panel">
+<div class="chart-title"><b>2026 前九个月：亏损和现金流</b><span class="sub">十亿美元</span></div>
+<div class="cash-layout">
+<div class="cashbox"><b style="color:var(--red)">−$104.0B</b><span>GAAP 净亏损</span></div>
+<div class="cashbox"><b style="color:var(--green)">+$6.6B</b><span>经营活动现金流</span></div>
+</div>
+<div class="sub" style="margin-top:17px">净亏损构成中，融资工具公允价值变动约 $94.3B</div>
+<div class="valuation"><div class="fair" title="约 $94.3B 公允价值变动"></div><div class="rest" title="其余亏损约 $9.7B"></div></div>
+<div class="key"><span><i class="dot orange"></i>约 $94.3B 公允价值变动</span><span><i class="dot" style="background:#d5ded7"></i>其余约 $9.7B</span></div>
+<div class="callout orange"><b>不要把净亏损直接当成现金消耗：</b>估值上升带来的负债/融资工具公允价值重估会计入损益，但不等同于同额现金流出。经营现金流为正也不代表长期算力承诺已被覆盖。</div>
+<div class="panel" style="margin-top:14px;background:#fbfcf8">
+<div class="chart-title"><b>净亏损桥：$104.0B 是怎样形成的？</b><span class="sub">2026 前九个月 · 十亿美元</span></div>
+<div class="chart-bars">
+<div class="chart-bar-row"><span class="chart-bar-label">票据 / 衍生工具 / SAFE 公允价值变动</span><div class="chart-track"><div class="chart-bar orange" style="width:90.7%"></div></div><span class="chart-num">−$94.324B</span></div>
+<div class="chart-bar-row"><span class="chart-bar-label">伙伴融资资产与负债估值</span><div class="chart-track"><div class="chart-bar blue" style="width:10%"></div></div><span class="chart-num">−$10.397B</span></div>
+<div class="chart-bar-row"><span class="chart-bar-label">经营亏损</span><div class="chart-track"><div class="chart-bar" style="width:1.3%"></div></div><span class="chart-num">−$1.260B</span></div>
+<div class="chart-bar-row"><span class="chart-bar-label">利息收入（抵减亏损）</span><div class="chart-track"><div class="chart-bar mint" style="width:2.3%"></div></div><span class="chart-num">+$2.359B</span></div>
+<div class="chart-bar-row"><span class="chart-bar-label">所得税</span><div class="chart-track"><div class="chart-bar orange" style="width:1%"></div></div><span class="chart-num">−$0.417B</span></div>
+<div class="chart-bar-row"><span class="chart-bar-label"><b>GAAP 净亏损</b></span><div class="chart-track"><div class="chart-bar" style="width:100%;background:var(--red)"></div></div><span class="chart-num">−$104.039B</span></div>
+</div>
+<div class="callout blue"><b>“非现金”占比要分口径：</b>$94.324B 单项约为净亏损的 90.7%；再加上伙伴融资估值费用 $10.397B，两项合计 $104.721B，约为净亏损的 100.7%，因为经营结果与利息收入等项目抵回了一部分。两者是当期公允价值重估，通常不等同于当期现金支付；但可转债/衍生权利变贵会影响未来转换、稀释或结算，不能说经济代价为零。</div>
+<p class="source-note">公司解释，$94.324B 主要来自企业估值上升导致未偿可转债、衍生工具及 SAFE 的公允价值增加；$10.397B 主要涉及伙伴融资安排相关资产 / 负债的初始公允价值确认及后续变动。Amazon 的转换权可能随估值上升而更值钱，但这不是 Amazon 已实现的等额利润，也不能把 Anthropic 的全部会计费用直接等同为 Amazon 的收益。</p>
+</div>
+</div>
+</div>
+</section>
+
+<section>
+<div class="secthead"><h2>03 / 算力承诺的时间分布</h2><p>多年采购及租赁总额约 $900.9B</p></div>
+<div class="grid">
+<div class="panel">
+<div class="commit-total"><strong>$900.9B</strong><span>披露的累计采购与租赁承诺</span></div>
+<div class="splitbar"><span class="before">$451.6B · 预计至 2030 年底前</span><span class="after">$449.3B · 之后</span></div>
+<div class="sub">横跨多年合同；其中有短期采购，也包含尚未开始的租赁安排。</div>
+<svg viewBox="0 0 700 142" role="img" aria-label="算力承诺金额时间示意图" style="margin-top:12px">
+<line x1="55" y1="65" x2="640" y2="65" stroke="#cbd6cc" stroke-width="5" stroke-linecap="round"/>
+<circle cx="72" cy="65" r="12" fill="#d9f36a" stroke="#153d32" stroke-width="3"/><circle cx="355" cy="65" r="12" fill="#176d52" stroke="#fffefa" stroke-width="3"/><circle cx="625" cy="65" r="12" fill="#f1a466" stroke="#fffefa" stroke-width="3"/>
+<text x="46" y="35" class="value">2026</text><text x="320" y="35" class="value">2030 年底</text><text x="590" y="35" class="value">之后</text>
+<text x="48" y="105" class="axis">当前已发生费用单独列报</text><text x="280" y="128" class="axis">合同承诺按未来交付/租赁时间分布</text>
+</svg>
+<div class="callout"><b>看金额要看期限：</b>约一半承诺预计 2030 年底前发生；金额不代表当前到期应付款。部分协议包含不可取消最低承诺，另一些与交付容量、时间和价格等条件相关。</div>
+</div>
+<div class="panel">
+<div class="chart-title"><b>三个不能混为一谈的数字</b></div>
+<div class="compare">
+<div class="comp-row"><span class="comp-label">期间算力费用</span><div class="scale"><div class="fill" style="width:2.1%"></div></div><span class="comp-value">$18.8B</span></div>
+<div class="comp-row"><span class="comp-label">短期算力采购</span><div class="scale"><div class="fill orange" style="width:.72%"></div></div><span class="comp-value">$6.5B</span></div>
+<div class="comp-row"><span class="comp-label">多年承诺总额</span><div class="scale"><div class="fill mint" style="width:100%"></div></div><span class="comp-value">$900.9B</span></div>
+</div>
+<div class="callout blue">期间费用是已发生的经营成本；短期采购是费用中的一种采购方式；多年承诺是跨未来期间的合同口径。图中比较数量级，不表示三者可相加。</div>
+</div>
+</div>
+<div class="grid" style="margin-top:14px">
+<div class="panel">
+<div class="chart-title"><b>$900.9B 的量级对比</b><span class="sub">统一按十亿美元展示；不同口径仅作尺度比较</span></div>
+<div class="chart-bars">
+<div class="chart-bar-row"><span class="chart-bar-label">多年算力 / 租赁承诺</span><div class="chart-track"><div class="chart-bar orange" style="width:100%"></div></div><span class="chart-num">$900.9B</span></div>
+<div class="chart-bar-row"><span class="chart-bar-label">Alphabet 2025 营收</span><div class="chart-track"><div class="chart-bar blue" style="width:44.7%"></div></div><span class="chart-num">~$402.8B</span></div>
+<div class="chart-bar-row"><span class="chart-bar-label">Anthropic LTM 营收*</span><div class="chart-track"><div class="chart-bar mint" style="width:4%"></div></div><span class="chart-num">~$36B</span></div>
+</div>
+<div class="callout">按视频使用的比较口径，$900.9B 约为 Anthropic 过去一年营收的 25 倍、Alphabet 2025 全年营收的 2.2 倍。图表也提醒：左侧是横跨多年且包含不同法律条件的合同承诺，右侧是单年收入流量，两者不是同一期间的负债与收入覆盖率。</div>
+<p class="source-note">*视频所称 LTM 约 $36B 的分母；Alphabet 2025 营收约 $402.8B。承诺金额按 SEC 披露。地域 GDP 只作为视频类比，不纳入图表以免与公司财务量纲混淆。</p>
+</div>
+<div class="panel">
+<div class="chart-title"><b>总额如何拼到 $900.9B</b><span class="sub">SEC 的承诺分类，非单一债务余额</span></div>
+<div class="stacked" role="img" aria-label="算力承诺组成：固定及可确定319.993十亿美元，短期承诺17.4，已签署未开始租赁451.2，9月30日后新增105.7，之后短期承诺6.6">
+<span class="s1" style="width:35.51%">$320.0</span><span class="s2" style="width:1.93%"></span><span class="s3" style="width:50.09%">$451.2</span><span class="s4" style="width:11.73%">$105.7</span><span class="s5" style="width:.74%"></span></div>
+<div class="key"><span><i class="dot"></i>固定 / 可确定 $320.0B</span><span><i class="dot" style="background:var(--blue)"></i>短期 $17.4B</span><span><i class="dot orange"></i>已签未开始租赁 $451.2B</span><span><i class="dot" style="background:#263e55"></i>9/30 后新增 $105.7B</span><span><i class="dot" style="background:#89988d"></i>后续短期 $6.6B</span></div>
+<div class="highlight-stat" style="margin-top:13px"><strong>$70.7B</strong><span class="sub">预计未来 12 个月到期 / 发生</span></div>
+<div class="callout orange">这个口径由不同日期、交付条件、租赁起始时间和可取消条款组成。已签但未开始的长期租赁是总额的大头；不等于今天就要付 $900.9B 现金。另有未定价 TPU 容量估算 $125–150B 未计入该总额。</div>
+</div>
+</div>
+<div class="panel" style="margin-top:14px">
+<div class="chart-title"><b>逐步锁定算力：主要公开合同的时间线</b><span class="sub">金额是合同期限内的承诺 / 预估付款，不能直接相加；同一合作可能多次修订</span></div>
+<div class="data-table-wrap"><table class="data-table"><thead><tr><th>签订 / 修订</th><th>伙伴与期限</th><th>披露金额</th><th>合同要点</th></tr></thead><tbody>
+<tr><td>2025.11；2026.02–11 修订</td><td>Microsoft · 2026.11–2033.06</td><td>$47.2–49.2B</td><td>最低支出承诺；除微软重大违约或部分容量未交付等情形外，不可取消。</td></tr>
+<tr><td>2026.03；05–10 修订</td><td>Google · 2026.04–2033.07</td><td>最低约 $121.3B</td><td>不足最低用量需 true-up；另有 2028–2031 年额外 TPU 预估 $125–150B，但无固定价格，未计入 $900.9B。</td></tr>
+<tr><td>2026.04</td><td>Amazon · 2026.05–2036.04</td><td>最低约 $110B</td><td>若用量不足需补足最低支出；除 Amazon 违约等情形外不可取消。</td></tr>
+<tr><td>2026.05–10</td><td>SpaceXAI（原 xAI）· 至 2029</td><td>最高约 $120.5B</td><td>预计 2026.12 满负荷时约 $3.1B / 月；初始不可取消期之后可提前 90 天通知取消。</td></tr>
+<tr><td>2026.05–08</td><td>Lambda · 至 2034</td><td>约 $41.3B</td><td>费用与容量交付 / 验收关联；约 $34.9B 的 8 月批次设有场地租约条件。</td></tr>
+<tr><td>2026.07</td><td>AMD · 初始容量于 2027 开始</td><td>若采购初始全量，预计超过 $20B</td><td>金额随容量选择与条件而定；符合条件时可能追加约同等规模容量。</td></tr>
+<tr><td>2026.08</td><td>Nscale · 至 2033</td><td>最高约 $44.6B</td><td>按交付并验收的容量计费，并受融资条件影响。</td></tr>
+<tr><td>2026 年披露五年租约</td><td>Broadcom · 设备租赁</td><td>租金约 $161.2B（不含利息）</td><td>分季度支付；这是租赁支付承诺，与上述云服务合同的价格及起算条件不同。</td></tr>
+</tbody></table></div>
+<p class="source-note">合同金额、起止期及取消条件摘自 S-1/A3“Material contractual obligations”。不同披露的合同可能涉及修订、固定费用、预估费用、交付条件或同一基础设施链条，切勿把本表各行机械加总；总额采用 SEC 对承诺项目的分类汇总。</p>
+</div>
+</section>
+
+<section>
+<div class="secthead"><h2>04 / IPO 时间轴与发行结构</h2><p>从注册文件到预计开盘</p></div>
+<div class="grid">
+<div class="panel">
+<div class="timeline">
+<div class="event"><time>2026 · 10 · 26</time><p>Anthropic 向 SEC 公开提交初始 S-1 注册文件。</p></div>
+<div class="event"><time>2026 · 11 · 17</time><p>最新 S-1/A 修订文件提交。</p></div>
+<div class="event"><time>2026 · 11 · 18</time><p>注册生效；最终发行价定为每股 $83。</p></div>
+<div class="event"><time>2026 · 11 · 19</time><p>预计在 Nasdaq Global Select 以 <b>ANT</b> 开始交易。</p></div>
+<div class="event"><time>2026 · 11 · 20</time><p>预计交割日，仍受惯常交割条件约束。</p></div>
+</div>
+</div>
+<div class="panel">
+<div class="chart-title"><b>发行结构</b><span class="pill">每股 $83</span></div>
+<div class="capital-flow">
+<div class="flowbox"><b>956.35M 股</b><small>公司新发行<br>发行款进入公司（扣除费用）</small></div><div class="arrow">＋</div><div class="flowbox"><b>23.65M 股</b><small>现有股东出售<br>对应款项归出售股东</small></div>
+</div>
+<div class="callout">合计发行 980M 股。承销商另有 30 天超额配售权，可额外购买最多 147M 股 A 类股。</div>
+<div class="callout orange">算力需求和资本需求与 IPO 有明显关联，但“现金快用完”或“把风险转给散户”是评论推论，并非公司公告确认的单一上市动机。</div>
+<div class="panel" style="margin-top:14px;background:#fbfcf8">
+<div class="chart-title"><b>“大约融到 $90B”从哪里来？</b><span class="sub">初步 S-1 估算 vs 最终定价</span></div>
+<div class="chart-bars">
+<div class="chart-bar-row"><span class="chart-bar-label">最初假设：公司 IPO 净收入</span><div class="chart-track"><div class="chart-bar blue" style="width:79.3%"></div></div><span class="chart-num">$84.6B</span></div>
+<div class="chart-bar-row"><span class="chart-bar-label">加满额超额配售：净收入</span><div class="chart-track"><div class="chart-bar mint" style="width:87.8%"></div></div><span class="chart-num">$93.7B</span></div>
+<div class="chart-bar-row"><span class="chart-bar-label">最终：公司 IPO 新股总额</span><div class="chart-track"><div class="chart-bar" style="width:74.4%"></div></div><span class="chart-num">$79.38B 毛额</span></div>
+<div class="chart-bar-row"><span class="chart-bar-label">另加 Class N 私募认购</span><div class="chart-track"><div class="chart-bar orange" style="width:24.4%"></div></div><span class="chart-num">$26.0B 毛额</span></div>
+</div>
+<div class="callout">视频的“约 $90B”很可能取自早期注册文件：假设发行价 $74，预计 IPO 净募集 $84.6B；若承销商全额行使超额配售权则 $93.7B。最终每股定价 $83 后，公司公开发行 956.35M 股新股，对应约 $79.38B 毛额；同期 Class N 私募约 $26B 毛额。合并约 $105.4B 是公司融资毛额估算，实际净额还要扣承销折扣与费用。另有 23.65M 股为老股出售，约 $1.96B 归出售股东，不进入公司。公开发行总额加 PIPE 约 $107.3B 是包含二级出售的交易规模，不等于公司募资额。</div>
+</div>
+<div class="callout blue"><b>合作方若卖股会不会压低股价？</b>在其他条件不变时，集中增加可交易股票供给会形成卖压，尤其若成交量相对日常流动性很大；但股价不会机械地按出售金额下跌。需求、解禁 / 登记限制、售出速度、是否预先披露及公司基本面都会影响结果。战略伙伴的 Class N 转给无关联第三方通常转为 A 类股，但具体转售权、登记权与可售时点仍按各自证券条款和适用规则。</div>
+</div>
+</div>
+</section>
+
+<section>
+<div class="secthead"><h2>05 / 巨头关系：算力合同、融资与股权</h2><p>视频 06:36–07:30 · 把“买算力”和“借钱”拆开看</p></div>
+<div class="grid">
+<div class="panel">
+<div class="frame-head"><div><div class="frame-label">视频画面复核 · 06:36 / 06:42</div><h3 style="margin:4px 0 0">同一家公司，可能同时是供应商与融资方</h3></div><a class="video-ref" href="https://www.bilibili.com/video/BV1Pbs26TEb5/?t=396" target="_blank" rel="noopener">跳到视频 06:36 ↗</a></div>
+<div class="frame">
+<div class="frame-title">供应商融资：资金绕回合同付款</div>
+<div class="frame-nodes"><div class="frame-node">云 / 芯片伙伴<small>交付算力、设备或机房</small></div><div class="frame-arrow">→</div><div class="frame-node">Anthropic<small>签采购、云服务或租赁合同</small></div></div>
+<div class="frame-nodes" style="margin-top:8px"><div class="frame-node">贷款 / 票据<small>按额度与里程碑提供</small></div><div class="frame-arrow">←</div><div class="frame-node">供应商 / 关联融资方<small>部分资金可限定用途</small></div></div>
+</div>
+<p class="diagram-caption">这是依据视频画面重绘的示意图，不是原视频截图；点击时间点可回看讲解。合同法律关系、提款条件与转换价格以 SEC 文件为准。</p>
+<div class="callout orange"><b>关键区别：</b>签了多年算力合同，不代表对应金额已经借出；“额度”也不是现金。要分清已提款借款、未提款额度、按里程碑触发的未来融资，以及只用于支付该供应商租金的专项融资。</div>
+</div>
+<div class="panel">
+<div class="chart-title"><b>披露中的融资工具对照</b><span class="sub">截至 2026-09-30</span></div>
+<div class="contract-grid" style="grid-template-columns:1fr">
+<div class="contract-card"><h4>Amazon 2023/2024 票据</h4><p>约 $6.2B 本金仍未结清。IPO 时受 12% 持股上限约束，能转换的部分按每股 $2.0928 / $5.0478 与 IPO 价两者较低者换成 Class N；不能转换的余额成为无息 rollover notes，之后按季度在上限内继续转换。</p><span class="tag">旧票据 · 分批转换</span></div>
+<div class="contract-card"><h4>Amazon 2026 NPA</h4><p>最多 $15B，期末未提款。按 $5B 一档，在达到算力容量里程碑后可提取；IPO 后每次提款以当时 30 日 VWAP 结算为 Class N，受持股上限与商业协议期限约束。</p><span class="tag orange">未提款 · 里程碑触发</span></div>
+<div class="contract-card"><h4>Google 2026 NPA</h4><p>最多 $20B，期末未提款；Google 另有最高 $10B 的 Class N 认购选择权，按约定完成后 NPA 额度减至 $10B。IPO 后可协商票据条款，未能协商时按 30 日 VWAP 结算 Class N；提款受算力与收入目标约束。</p><span class="tag orange">未提款 · 另有私募投资</span></div>
+<div class="contract-card"><h4>Broadcom 专项租金额度</h4><p>最多 $42B，期末未提款，资金用途限于特定租赁安排的季度租金。票据年利率 9% 且可利息转本金；特定收入条件未达时条款可能变为 13% 与更低转换价。符合条件时可按 VWAP 的 90% 转成 Class N。</p><span class="tag orange">专项融资 · 可转股</span></div>
+<div class="contract-card"><h4>循环信贷额度</h4><p>另有 $15B 优先担保循环信贷额度；期末未提款。它是传统银行信贷安排，不是供应商给的算力采购合同，也不应与三项 NPA 合并成已借债务。</p><span class="tag">银行循环额度</span></div>
+</div>
+<div class="callout blue">三项供应商 / 伙伴 NPA 合计最高 $77B，但截至 2026-09-30 均未提款。它们是潜在融资能力，不是当期现金余额或已发生债务。</div>
+</div>
+</div>
+<div class="panel" style="margin-top:14px">
+<div class="chart-title"><b>巨头在这张网络里扮演的角色并不相同</b><span class="sub">按公开文件披露的关系分类</span></div>
+<table class="relation-table"><thead><tr><th>伙伴</th><th>算力 / 商业关系</th><th>融资关系</th><th>股权关系</th></tr></thead><tbody>
+<tr><td>Amazon</td><td>云算力与商业合作</td><td>旧票据约 $6.2B；另有最高 $15B 条件额度</td><td>Class N / 私募安排</td></tr>
+<tr><td>Google</td><td>云算力与商业合作</td><td>最高 $20B 条件额度；旧融资已转换</td><td>Class N 私募；该额度会按条款缩减</td></tr>
+<tr><td>Broadcom</td><td>基础设施、设备及租赁安排</td><td>最高 $42B 专项租金融资</td><td>转换后可能取得 Class N</td></tr>
+<tr><td>AMD</td><td>Helios 系统 / MI450 GPU 采购、租赁或接入</td><td>不属于贷款：最高 $5B 股权承诺</td><td>已有 $2.5B 同期私募认购抵扣；余下最多 $2.5B 按 GPU 交付与部署里程碑可提取</td></tr>
+<tr><td>Microsoft / NVIDIA</td><td>商业与技术合作关系</td><td>不要把合作金额自动当作贷款</td><td>以招股书各自私募披露为准</td></tr>
+</tbody></table>
+<div class="diagram-caption">同一伙伴可能同时出现在商业合同、融资和持股关系中，但每个合同独立计价、触发和结算。图中“未提款”以招股书 2026-09-30 口径为准。</div>
+</div>
+</section>
+
+<section>
+<div class="secthead"><h2>06 / A、N、T、F、E：股票权利拆分</h2><p>视频 17:23–18:15 · 投票权与经济权益不是一回事</p></div>
+<div class="grid">
+<div class="panel">
+<div class="frame-head"><div><div class="frame-label">视频画面复核 · 17:23</div><h3 style="margin:4px 0 0">先把“谁有钱权”与“谁有控制权”分成两条轴</h3></div><a class="video-ref" href="https://www.bilibili.com/video/BV1Pbs26TEb5/?t=1041" target="_blank" rel="noopener">跳到视频 17:21 ↗</a></div>
+<div class="frame">
+<div class="frame-title">视频中的类别板书：A / N / F / T</div>
+<div class="frame-nodes"><div class="frame-node">A · 公开股<small>投票 + 经济权益</small></div><div class="frame-node">N · 无普通投票权<small>保留经济权益</small></div><div class="frame-node">F · 创始人特别股<small>特殊投票权</small></div></div>
+<div class="frame-nodes" style="grid-template-columns:1fr;margin-top:8px"><div class="frame-node">T · 长期利益信托控制股<small>董事会治理权 · 无经济权益</small></div></div>
+</div>
+<p class="diagram-caption">按视频 17:23 画面重绘；招股书还列出面向员工的 Class E。类别名称相近，不代表权利相同。</p>
+</div>
+<div class="panel">
+<div class="chart-title"><b>正式条款：五类股票的权利矩阵</b><span class="sub">以 S-1/A3 为准</span></div>
+<div class="class-grid">
+<div class="class-card"><div class="class-tag">A</div><b>公开交易普通股</b><p>每股一票；可参与普通股经济分配；选择非 T 类董事。转让时仍为 A。</p></div>
+<div class="class-card"><div class="class-tag">N</div><b>战略伙伴普通股</b><p>普通事项无投票权（法律要求事项除外）；经济权利与 A 相同；转给非关联第三方通常转为 A。</p></div>
+<div class="class-card"><div class="class-tag">T</div><b>信托治理股</b><p>由 LTBT 持有；选任 / 罢免 T 类董事；组成董事会授权席位多数；无一般股东投票与经济权利。</p></div>
+<div class="class-card"><div class="class-tag">F</div><b>创始人特别股</b><p>Founder LLC 持有一股；一般股东事项总投票权固定为 50.1%，包括选任非 T 类董事；无经济权利。</p></div>
+<div class="class-card"><div class="class-tag">E</div><b>员工特别股</b><p>仅就少数指定事项享有投票权；无经济权利。创始人不在该类别内。</p></div>
+</div>
+<div class="callout"><b>看股权的两个维度：</b>A / N 主要承载经济权益；T / F / E 则是治理或有限保护性投票安排。Class N “无普通投票权”不等于没有股份价值；Class F 的 50.1% 是投票权比例，不是 50.1% 经济持股。</div>
+</div>
+</div>
+</section>
+
+<section>
+<div class="secthead"><h2>07 / 视频中的七席董事会说法，怎样对照正式结构？</h2><p>视频 19:08–19:52 · 席位数字与法定任免权要分开</p></div>
+<div class="grid">
+<div class="panel">
+<div class="frame-head"><div><div class="frame-label">视频画面复核 · 19:13</div><h3 style="margin:4px 0 0">视频用“七席”解释提名争议</h3></div><a class="video-ref" href="https://www.bilibili.com/video/BV1Pbs26TEb5/?t=1150" target="_blank" rel="noopener">跳到视频 19:10 ↗</a></div>
+<div class="frame">
+<div class="frame-title">视频口述模型：信托提名 / 创始人提名</div>
+<div class="frame-nodes"><div class="frame-node">长期利益信托<small>视频称可确保 3 席，并提名第 4 席</small></div><div class="frame-arrow">↔</div><div class="frame-node">Founder LLC<small>视频称剩余 3 席由创始人方决定</small></div></div>
+</div>
+<p class="diagram-caption">这是视频对席位安排的口语化概括。席位数、提名委员会程序和最终任免权应以生效章程及招股书为准。</p>
+</div>
+<div class="panel">
+<div class="chart-title"><b>招股书强调的是“类别董事任免权 + 一般事项投票权”</b></div>
+<div class="control-split">
+<div class="control-box"><span class="pill">LTBT / Class T</span><strong>董事会授权席位多数</strong><p>Class T 股可选任与罢免 Class T 董事；LTBT 本身不负责日常经营管理。</p></div>
+<div class="control-box f"><span class="pill warn">Founder LLC / Class F</span><strong>一般事项 50.1% 投票权</strong><p>涉及一般股东表决及非 T 类董事选举；包括重大公司事项，但不等于经济持股 50.1%。</p></div>
+</div>
+<div class="callout blue"><b>不要把两种控制权压成一个比例：</b>LTBT 通过董事会席位影响监督与治理；Founder LLC 的 Class F 则在一般股东表决中拥有特别投票权。董事会具体人数会受章程与任命程序影响，视频“3 + 3 + 第 4 席”的速记不等于完整法律条文。</div>
+</div>
+</div>
+</section>
+
+<section>
+<div class="secthead"><h2>08 / 视频观点核对</h2><p>区分已披露事实、合同口径与评论推断</p></div>
+<div class="grid">
+<div class="panel">
+<div class="chart-title"><b>结构性说法核验</b><span class="sub">按最新 S-1/A3 与最终定价披露</span></div>
+<div class="claim"><div>巨头既是算力伙伴，也是资金来源</div><div><span class="pill">部分属实</span></div><div class="evidence">Amazon、Google、Broadcom 的合同与融资关系可交叉；AMD、Microsoft、NVIDIA 的具体身份各异，不能统称为贷款方。</div></div>
+<div class="claim"><div>算力合同的钱会借回来再付合同</div><div><span class="pill warn">只适用于特定安排</span></div><div class="evidence">Broadcom 专项额度用于特定租金；其他 NPA 也有里程碑和用途条款，不等于资金一律原路回流。</div></div>
+<div class="claim"><div>最高 $77B 融资</div><div><span class="pill">额度属实</span></div><div class="evidence">截至 2026-09-30 三项 NPA 均未提款；另有旧 Amazon 票据与独立银行循环信贷。</div></div>
+<div class="claim"><div>Class F 拥有公司 50.1%</div><div><span class="pill red">易误读</span></div><div class="evidence">准确说法是一般股东事项总投票权 50.1%，并非经济持股 50.1%。</div></div>
+<div class="claim"><div>信托与创始人各控制若干席位</div><div><span class="pill warn">视频简化模型</span></div><div class="evidence">正式文件以 T 类董事选任机制、Class F 投票权和章程程序描述治理，不宜只按“七席分配”理解。</div></div>
+</div>
+<div class="panel">
+<div class="chart-title"><b>如何理解利益捆绑</b></div>
+<div class="timeline">
+<div class="event"><time>供给侧</time><p>伙伴承诺云、GPU、设备或机房；Anthropic 承担使用量、采购量或租赁付款义务。</p></div>
+<div class="event"><time>融资侧</time><p>部分伙伴提供旧票据或附条件额度；额度可未提款，且可能要求达到收入 / 算力里程碑。</p></div>
+<div class="event"><time>股权侧</time><p>战略投资者可能拿到 Class N；部分债务可按各自公式转换为 N 股。N 股有经济权益，但无普通事项投票权。</p></div>
+<div class="event"><time>治理侧</time><p>公开发行 A 股扩大股东面；T / F / E 特别类别仍定义董事会与投票权边界。</p></div>
+</div>
+<div class="callout">利益绑定来自多份合同与不同股票条款的组合，不是一份“巨头联合贷款协议”。供应、融资、投资与治理要分别读条款，再看它们如何相互作用。</div>
+</div>
+</div>
+</section>
+<section class="tab-anchor">
+<div class="secthead"><h2>09 / 批注深化：信用评级、数据中心与估值模型</h2><p>把视频里压缩成一句话的结论，补上来源与边界</p></div>
+<div class="grid">
+<div class="panel">
+<div class="chart-title"><b>KBRA 的 BB+：评级对象与边界</b><span class="pill warn">2026 年 6 月报道</span></div>
+<div class="highlight-stat"><strong>BB+</strong><span>投机级区间，低于投资级最低档 BBB− 一档</span></div>
+<p>这不是给 Anthropic 所有债务整体打的通用评级。媒体报道指 KBRA 对一项约 $35B 芯片融资结构中的约 $4.4B 次级债给出 BB+、稳定展望；该部分贷款人直接暴露于 Anthropic 信用，票息约 8.5%。相较之下，高级债约 5.75%，并有 Broadcom 相关信用支持，因此风险分层明显。</p>
+<div class="callout orange">报道称 KBRA 获得的财务材料有限：主要看指定收入、调整后经营收益、Q1 年化运行率与内部 Q2 预测，没有完整自由现金流 / EBITDA 序列，并使用自有风险评分。解读时应把它视作特定融资结构下的一次信用判断，不宜说“KBRA 给 Anthropic 所有债务定为垃圾级”。公开报道没有显示这是 Moody’s、S&P 或 Fitch 的评级。</div>
+<p class="source-note">来源：Financial Times 对 KBRA / 芯片融资评级的报道；评级报告及完整模型假设并未在公司 S-1 中公开。</p>
+</div>
+<div class="panel">
+<div class="chart-title"><b>Fluidstack 的 $50B 数据中心计划</b><span class="pill">合作项目，不等同于股权控制</span></div>
+<div class="timeline">
+<div class="event"><time>2025.11.12 · 宣布</time><p>Anthropic 宣布与 Fluidstack 合作，在美国投资 $50B 建设定制 AI 数据中心，首批地点在德州与纽约。</p></div>
+<div class="event"><time>2026 年起 · 计划上线</time><p>公司公告称项目将陆续上线；预计创造约 800 个长期岗位与 2,400 个施工岗位。</p></div>
+<div class="event"><time>2026.08 · 另一个平台</time><p>Anthropic、Macquarie Asset Management 与 GIC 宣布成立 Theseus Infrastructure，负责开发、运营并出租数据中心。Macquarie 管理的基金与 GIC 拥有该平台，并提供每个项目的大部分股权资金；Anthropic 是长期锚定租户。这是另一项基础设施合作，不能与 Fluidstack 项目混为一谈。</p></div>
+</div>
+<div class="callout blue">目前公开的 Fluidstack 公告把对方称为数据中心建设合作伙伴，并未说明该项目由 Anthropic 全资持有、控制 Fluidstack，或设立了双方共同控制的合资公司。因此稳妥结论是“合作建设与投资计划；所有权 / 控制权细节未披露”。$50B 是多年基础设施投资计划，也不应直接等同于 S-1 的已签算力合同余额。</div>
+</div>
+</div>
+<div class="panel" style="margin-top:14px">
+<div class="chart-title"><b>Damodaran 的 $1.475T DCF：这是一个情景模型，不是公司指引</b><span class="sub">NYU Stern 教授 Aswath Damodaran · 2026 年 10 月模型</span></div>
+<div class="grid" style="grid-template-columns:repeat(4,1fr)">
+<div class="cashbox"><b>$1T</b><span>2036 年目标营收</span></div><div class="cashbox"><b>27.5%</b><span>长期营业利润率；监管成本前假设 32.5%</span></div><div class="cashbox"><b>9.74%</b><span>资本成本 / 折现率，按 BB+ 风险设定</span></div><div class="cashbox"><b>3×</b><span>销售额 / 投入资本，衡量再投资效率</span></div>
+</div>
+<div class="chart-bars">
+<div class="chart-bar-row"><span class="chart-bar-label">极乐观情景营收（2036）</span><div class="chart-track"><div class="chart-bar" style="width:100%"></div></div><span class="chart-num">$1,000B</span></div>
+<div class="chart-bar-row"><span class="chart-bar-label">DCF 中假设的债务现值</span><div class="chart-track"><div class="chart-bar orange" style="width:47.2%"></div></div><span class="chart-num">~$472B</span></div>
+<div class="chart-bar-row"><span class="chart-bar-label">IPO 后现金假设</span><div class="chart-track"><div class="chart-bar blue" style="width:10%"></div></div><span class="chart-num">$100B</span></div>
+</div>
+<div class="callout">在他的乐观设定下，要支持约 $1.475T 股权价值，Anthropic 需在 2036 年达到约 $1T 营收，并实现 27.5% 长期营业利润率；模型把算力采购承诺折现纳入约 $472B 债务，并假设 IPO 带来 $100B 现金。视频中的“2031 年营收追上 Alphabet”是模型情景的中间路径概括；DCF 的价值主要由多年后的现金流、利润率、资本成本与再投资效率共同决定，不是单点预测。</div>
+<div class="callout orange">模型对假设极敏感：Damodaran 也展示了较悲观情景，例如 2036 年营收仅 $200B、10% 利润率、算力受限和较低资本效率时，股权价值可能大幅转负。把 $1.475T 当成必然合理价，会忽略算力承诺、模型竞争和缩放定律失效等风险。</div>
+<p class="source-note">主要来源：Damodaran 原始估值博客与随附 DCF 表格；其估值是个人模型，不是投资银行承销估值、公司财务指引或市场一致预期。</p>
+</div>
+</section>
+
+<section>
+<div class="secthead"><h2>10 / 接下来值得盯的三个指标</h2><p>用来检验增长是否可持续</p></div>
+<div class="grid" style="grid-template-columns:repeat(3,1fr)">
+<div class="panel"><h3>单位经济性</h3><div class="sub">模型服务毛利、单位推理成本下降速度、经营现金流能否持续为正。</div></div>
+<div class="panel"><h3>算力兑现率</h3><div class="sub">合同容量何时交付、利用率多少、收入是否能覆盖新增供给与最低承诺。</div></div>
+<div class="panel"><h3>收入持续性</h3><div class="sub">Q3 的增长速度是否延续，客户集中度与用量波动是否带来回落。</div></div>
+</div>
+</section>
+
+
+
+<footer class="footer">
+<b>来源（以一手文件为主）</b>
+<div class="sources">
+<a href="https://www.sec.gov/Archives/edgar/data/2130357/000162828026074338/anthropicpbc-sx1ax3.htm" target="_blank" rel="noopener">SEC：S-1/A3（2026-11-17）</a>
+<a href="https://www.sec.gov/Archives/edgar/data/2130357/000162828026067168/anthropicpbc-sx1.htm" target="_blank" rel="noopener">SEC：初始 S-1（2026-10-26）</a>
+<a href="https://www.anthropic.com/news/anthropic-prices-initial-public-offering" target="_blank" rel="noopener">Anthropic：最终定价公告（2026-11-18）</a>
+<a href="https://www.anthropic.com/news/anthropic-invests-50-billion-in-american-ai-infrastructure" target="_blank" rel="noopener">Anthropic：与 Fluidstack 合作的 $50B 美国算力基础设施计划</a>
+<a href="https://www.macquarie.com/au/en/about/news/2026/anthropic-mam-gic-data-centre-infrastructure-partnership.html" target="_blank" rel="noopener">Macquarie：Theseus Infrastructure 合作公告</a>
+<a href="https://aswathdamodaran.blogspot.com/2026/10/" target="_blank" rel="noopener">Aswath Damodaran：2026 年 10 月估值模型</a>
+<a href="https://www.ft.com/content/5a310aee-f555-4266-874c-b1b4db20186d" target="_blank" rel="noopener">Financial Times：KBRA 与芯片融资评级报道</a>
+<a href="https://ipo.anthropic.com/documents/us/factsheet.pdf" target="_blank" rel="noopener">Anthropic IPO Factsheet</a>
+<a href="https://ipo.anthropic.com/" target="_blank" rel="noopener">Anthropic IPO 官方网站</a>
+<a href="https://www.sec.gov/Archives/edgar/data/2130357/000162828026074904/anthropic-sx1mef.htm" target="_blank" rel="noopener">SEC：S-1MEF 生效文件</a>
+<a href="https://www.bilibili.com/video/BV1Pbs26TEb5/?t=396" target="_blank" rel="noopener">视频原片：06:36 供应商融资画面</a>
+<a href="https://www.bilibili.com/video/BV1Pbs26TEb5/?t=1041" target="_blank" rel="noopener">视频原片：17:21 股票类别画面</a>
+<a href="https://www.bilibili.com/video/BV1Pbs26TEb5/?t=1150" target="_blank" rel="noopener">视频原片：19:10 董事会画面</a>
+</div>
+<p>本文整理自公开招股文件、公司披露和视频原片。视频画面卡片依据对应时间点的截图内容重绘，便于和正式条款并排理解；它们不是原始视频截图。视频为讲解材料，合同金额、转换与董事权利以 SEC 文件为准。静态图表用于说明量级和关系，不构成买卖建议。页面无外部脚本，可离线打开。</p>
+</footer>
+</div>
+<div class="tab-panel" id="transcript-panel" hidden>
+<section class="workspace" id="transcript-workspace">
+<div class="secthead"><h2>10 / 视频逐字稿 · 选段评论</h2><p>像阅读文档一样直接选中文字并添加批注</p></div>
+<div class="workspace-note"><b>评论方式：</b>逐字稿现在以正文形式排版。拖选任意文字，点击选区旁的“添加评论”；评论会显示在右侧，并高亮关联原文。评论自动保存在当前浏览器，也可导出 JSON，供下一轮修改 HTML 时使用。</div>
+<div class="workspace-layout">
+<div class="panel">
+<div class="chart-title"><b>完整逐字稿</b><span class="workspace-count">共 <b id="transcript-count">0</b> 字</span></div>
+<div class="chapter-nav">
+<button class="workspace-btn" data-chapter="起源" type="button">起源</button>
+<button class="workspace-btn" data-chapter="缩放定律" type="button">缩放定律</button>
+<button class="workspace-btn" data-chapter="供应商融资" type="button">供应商融资</button>
+<button class="workspace-btn" data-chapter="估值" type="button">估值</button>
+<button class="workspace-btn" data-chapter="深水区" type="button">深水区</button>
+</div>
+<div class="transcript-scroll"><article class="transcript-reader" id="transcript-reader">家人们好~
+[图片]
+
+全球最反华的AI公司ANTHROPIC即将上市 冲击史上第二大IPO 它的创始人曾经说过 往中国卖芯片就相当于往朝鲜卖核武器
+但又称自家的AI cloud是全球最安全的模型 万亿估值的背后又是怎样的危险游戏 这条万字视频我就带你一口气看懂它 Anthropic
+
+起源
+[图片]
+
+我们简称A社 是OpenAI deep sek这样的大模型公司的竞争者 这些公司呢只生产一样东西 就是他们各自的AI模型
+cloud cheat GPT和deep seek 那众所周知啊 A社的创始人达里奥是20年在OpenAI做出GP2 GP3之后
+因为跟OpenAI的CEOSAM奥特曼理念不和 才带队出走的 那当时还带走了一大批GP3论文的核心作者 那这也是为什么A社的招股书里面
+介绍创始团队的时候 甚至还提到了对家OpenAI的模型 说gt23都是我们A社的人开创的 而这帮人在21年出来创办A社之后呢
+在23年的一季度就推出了第一代的cloud 之后的营收增速就堪称恐怖啊 只用了3年多 按年化运行率来算呢
+营收就超过了OpenAI 你想想比OpenAI晚5年成立 还能反超老东家的营收 还能比老东家早上市
+那听起来是不是很爽呢 但是啊在这些光鲜的外表之下 这次A社的上市却透露出一种蹊跷的氛围 那在今年的6月份呢
+A社向美国证监会就秘密递交了上市申请 10月26日就公开了招股书 那那个时候市场预计的估值呢是2万亿左右啊 但随着11月3日美国中期选举
+市场就开始担心 但美国的科技股指数 纳斯达克 甚至一天蒸发了2.5万亿美元的市值啊
+那A社的估值传闻呢也就一路往下走 从2万亿掉到了1.5万亿 那彭博甚至说掉到1.2万亿都有可能 但在这种情况下
+A社依旧没有选择延缓上市 要知道啊 在估值缩水的情况下呢 上市的损失可能达到300亿美元
+差不多是这次融资总额的1/3 那他为什么非上不可呢 刚才我们看到了A社创始人们的研究介绍里 除了GPT2
+GP3之外 还有一个关键的词儿 缩放定律 看懂它你就能看懂一切的源头
+你说一个小孩只要读更多的书 就一定能变得更聪明吗 小孩咱不知道啊 但是AI如果读更多的书
+
+缩放定律
+[图片]
+
+就一定能变得更聪明 那这就是A社的联合创始人们在OpenAI的时候 就发现的缩放定律也被写进了A社的招股书里 原话是说呢
+只要我们去提升模型的参数规模 给他更多的训练数据和算力 那模型的能力就能顺着一条光滑的曲线 可预测的增加
+那这件事呢有两个读法 一个读法是说 如果AI模型的能力增长可以算出来 那你就可以大致算出来他哪一年会超过人类
+那这正是AI安全问题的起点 被称为AI教父的JEFFREYHINTON呢 就说过一句很有名的话 大意就是
+如果你想知道自己不再是最聪明的物种的时候 是什么感觉 那你可以去问问鸡 那这也是为什么A社在招股书的风险因素里面
+就写了 AI可能给人类带来灾难性 甚至关乎存亡的风险 而这件事情呢反过来看又成了A社的招牌
+一般正常人碰到这么一个危险的事情 可能第一反应就是说哎那就别造了 但是A社的结论就恰好相反 如果强大的AI无论如何都会被造出来
+那它最好是诞生在一个非常重视安全的 实验室里面 那说白了AH的逻辑就是说 正是因为AI这么危险
+那像我们这样重视安全的好学生 才更要站在第一线 把我们的cloud教的品德好还不够 还得让他考全班第一
+因为如果他考倒数第一的话 他的品德再好 别的家长也不会让自己的孩子去学 他只有他既考第一
+品德又好 那别的家长才会觉得哎呀品德好好像是必须的 那怎么才能考第一呢 就是多读书呗
+刚才咱们讲啊 对于AI来说 多读书有三个方面 更多的训练数据
+更大的模型和更多的算力 而且呢如果你仔细看缩放定律的这条曲线啊 纵轴代表的是模型会出现的错误 所以呢这个数值就是越低越好
+而横轴代表你需要投入的资源 而且它是按十倍十倍的往上涨的 也就是说啊在目前的水平上 模型每再进步一节
+投入的资源呢就得再乘十倍 而在这三种资源里呢 前两种都是可以花钱买来 或者说可以人为调控的
+它不受物理世界的限制 唯有算力受物理世界的限制 因为像数据中心芯片都不是一天能建成的 都要提前好几年锁定
+那招股书里面也说的很直接啊 我们能不能留在AI能力的最前沿 很大程度上取决于能不能拿到算力 那这也是为什么开头
+达里奥关于给中国卖芯片的言论会那么偏激 而过去的这几年呢 A社或者说全世界的AI实验室吧 都一直处在算力受限的状态
+也就是他没想到自己会发展的那么快 会需要那么多的算力 所以现在为了锁住算力 A社就付出了巨大的代价
+截止招股书的最新一版呢 A社一共签下了9009亿美元的算力合同 而今年年初这个数大约只有1050亿 平均每个月涨了约800亿美元
+而这次上市连同同一天的定增 一共大概能融到900亿美元左右 这甚至还不够付 他10月份一个月
+新签的约1000亿美元的算力订单 您说9009亿美元的算力订单是什么概念啊 它是A社过去一年营收的25倍 是alphabet
+也就是谷歌的母公司去年全年营收的2.2倍 差不多相当于河南或者湖北省一整年的GDP啊 而且这些账单里面有接近八成是写死了 不管你用不用都退不掉的账单
+比如说呢谷歌的1200多亿 亚马逊的1100亿 微软的接近500亿 都霸道的写明了
+不管A社到时候用不用 这些数据中心钱都要照付 而A社今年前九个月的营收加起来 也只有332亿
+连900亿的零头都不到 那付这些账单的钱到底从哪来呢 这里就进入了真正有意思的地方了 卖算力给A社的人呢
+
+供应商融资
+[图片]
+
+同时也借钱给A社 那这种做法呢就叫做供应商融资 比如说啊 亚马逊跟A社签了1100亿的算力合同
+又承诺呢借给他大约200亿 谷歌跟A社签了1200多亿的合同 同时也承诺借给他200多亿 其中的100亿在上市当天直接买他的股票
+博通租给A社1200多亿的设备 又给了他420亿的借款额度 那这笔钱呢就只能拿来付博通自己的租金 AAMD卖芯片给A社
+同时呢也承诺买50亿的股票 英伟达去年11月就承诺投资100亿美元以内 上市当天呢也会再买100亿的股票 那等
+听着是不是挺晕的 那这些大厂呢给A社的注资方式真是五花八门 有的是直接借款给A社 那有的呢是在A社上市之后买他的股票
+那听起来非常的晕啊 但是呢核心的逻辑其实非常的简单 大厂们借给A社的这些钱 基本上没有指望A社用现金来还
+比如说啊亚马逊早期给A社的借款 最后的还款方式呢是以两美元多一股的折扣价 去换成A社的股票 所以呢按A社上市当天
+70多块钱的发行价区间来算 亚马逊立刻就可以浮盈1300亿美元左右 那还有博通跟谷歌早期给A社的借款呢 也是可以以一个九折的折扣价换成A社的股票
+而后续参与进来的这些大厂 就没有拿到这么好的条款了 所以呢他们为了跟A社签下巨额的账单 更多的就是承诺在A社上市之后来买股票
+那这也有了A社上市当天就给七家供应商的 不过呢你有没有想过 大厂们手里拿着这么多股票 如果哪一天需要去止盈去落袋为安
+那是谁在承担呢 是全体的二级市场股东 那所以你现在看懂了吗 为什么A社急着上市啊
+是因为供应商借他的钱 最后他不是用现金来还的 而是用股票来还的 如果你成为了A社的新股东
+在大厂们退出的那天 其实你才是最终为A社的算力订单 买单的那个人 而且啊股东为这些账单买单
+其实对A社自己的信用也有好处 那今年的6月份呢 美国的一家评级机构 KBRA给A社的信用评级只有BB加
+也就是俗称的垃圾级 就是因为潜在的供应商融资风险太大了 如果你看最近几笔A社的借款 你就会发现利率都已经飙到了10%以上
+所以啊 如果二级市场的股东 可以把供应商融资置换出来 那A社的风险也会小很多
+那他之后如果想借更多的钱 也会更容易 而且更便宜 那我们现在知道了
+A社有9000多亿的算力账单 那他手里能动的钱有多少呢 算上A社一路从A轮融资到H轮 攒下的所有现金
+在供应商那里还没有用完的额度 银行贷款和这次上市能融到的所有钱 一共大约只有3000亿左右 只有总账单的1/3
+而剩下的6000多亿差值只能靠自己的营收 或者继续去发股票 或者继续借债来补齐 不过呢一个公司的信用是有限的呀
+那最重要的还是A社自己的营收得有说服力 那今年的三季度呢 就是A社营收最好的一个季度 差不多是170亿
+但是未来的12个月 光账单他就要付707亿 也就是说啊 就算接下来的12个月
+A社的营收一直保持三季度的水平 一年能做到678亿 但也还不够付制一年的账单呢 而账单的高压期是28年到30年
+目前光手上已经签下来的算力订单 就让A社平均每年需要付1170亿 是他眼下一年营收的1.7倍 那好对于这样的一家公司
+你愿意成为他的股民吗 1.3万亿 甚至1.5万亿的估值到底值不值呢 虽然有很多的媒体经常报道说
+
+估值
+[图片]
+
+A社今年前九个月的净亏损 高达1040亿美元 但这其实并不能说明A社的真实情况啊 因为在这个1000多亿里面呢
+有大概943亿 并不是真金白银的亏损 比如说我们刚才讲的 亚马逊可以两块多美元去买AH的股票
+那在A社估值越来越高的时候呢 亚马逊的浮盈也会越来越高 而亚马逊的浮盈就是A社账面上的亏损 所以净利润这个数字并不能说明情况啊
+真正能说明A社经营情况的 是它的营收和经营现金流 而这两个数字都非常漂亮 A社的营收增速非常亮眼啊
+23年只有4100万美元 到24年3.9亿 25年46亿 今年光前九个月就332亿美元的营收
+经营现金流也从去年前九个月的净流出20亿 变成了今年前九个月的净流入66亿 那A社的营收为什么能涨这么快呢 为什么能反超OpenAI呢
+那要知道啊 在cloud上线之初呢 CHAGP已经发布了四个月 已经抢占了个人市场
+所以呢A社一开始选择的就是企业端的打法 而在企业端里面 他们最优先攻克的又是编程 而编程是一个油水很厚的领域啊
+因为编程呢特别的费token的用量 你跑一个编程任务需要的token 可能是跟AI聊聊天的几十到上百倍 所以呢如果我们对比这两家的营收结构
+就能看得非常清楚啊 A社至少有八成的营收来自于企业和开发者 那剩下来自于个人用户的不到两成 他没有公布一共有多少家企业用户
+但是呢光是一年付他10万美元以上的大客户 就有1万2000家 年付1000万美元以上的有约250家 而OpenAI的营收呢是企业和个人一半一半
+他的企业客户有200多万家 那摊下来呢每家一年只付1万多美元 那当然啊 这些数据的口径呢也稍微有些出入的地方
+大家呢看个大概感觉就行 不过啊 企业们的用量其实来得快 砍得也快
+就像今年春天啊 硅谷的大公司就流行起来一个词叫token Maxine 就是比谁的token用的更多
+那metal的内部还专门搞了一个叫cloud economics token用量排行榜 榜上的8.5万名员工 在30天内一共烧掉了60万亿个token啊
+那第一名一个人就用了281000000000token 那不过呢5月底这个token的账单一到大场一看 说哎呀也没想到有这么贵啊 就又开始砍用量
+那财富杂志的标题甚至直接写token maxine is over 那企业们的用量一砍 A社的营收增速也跟着慢了下来 那要知道啊
+A社的营收呢主要分两种 一种是订阅 就是用户呢每个月交一笔固定的会员费 那用多用少呢都是这个价
+而另一种是按用量来计费 比如说企业们把cloud接入自己的系统 那处理多少token就付多少钱 那A社今年前九个月的营收里
+有差不多八成都是从第二种按用量收费收来的 那订阅呢只占两成 所以啊 它的营收
+就很容易随着企业的用量的波动而波动 那这也是为什么 三季度A社营收的增速 就从前两个季度的130%
+140%左右骤降到了47% 不过呢你会不会好奇 既然OpenAI有先发优势 那它为什么没有去占据这个企业端呢
+这里有一点其实没什么人讲的 就是渠道问题 像微软 谷歌
+亚马逊这些大厂 其实手里握着很多公司的云办公入口 而他们又是A社的供应商 债主和股东
+所以呢企业们在这些大厂的云平台上面 办公的时候 这些大厂就会把cloud的模型摆在上面 比如说啊微软office的copilot
+谷歌自己的编程工具 ANTIGRAVITY里面都可以直接选用cloud 所以A社今年前九个月 44%的营收
+其实都是通过云平台的渠道收过来的 那相比之下呢 OpenAI直到今年的4月份都只跟微软一家绑定 而微软的手里呢既有自己的模型
+又同时有A社和OpenAI两张牌 所以啊OpenAI的企业端渠道就变得更加的狭窄 不过呢渠道这些东西啊其实都是次要的 最最主要的还是模型的能力
+从artificial analysis最新的综合跑分上来看 A社11月9日刚上版的cloud fable 5.2拿了65分 排第一
+比第二名的谷歌GEMINI4carbon高了五分 那这其实也是用户们用它的原因啊 A社的招股书里面也写的很清楚 他超过八成的营收都来自
+过去六个月内发布的新模型 那用户的留存率呢 基本上都取决于A社的模型 是否在AI能力的最前沿
+所以我们小结一下 就是A社的营收主要是按用量来计费的 不是订阅 所以呢它会上下起伏的很厉害
+同时啊 现在cloud的深度用户 其实是那些追求最强模型的用户 而这些人并没有什么品牌忠诚度啊
+谁的模型最强 我就用谁 而且还有一点值得我们注意啊 就是过去A社的照这么漂亮
+其实也是因为他是轻资本运营 也就是说呢他并没有自己去建数据中心 而是选择从大厂这里租算力 但是啊在去年的11月份
+A社就宣布和一家叫fleet stack的公司合作 在美国呢投500亿美元来建定制的数据中心 因为长期来看啊 自己建还是比租要更划算
+而且呢也不会被大厂们卡脖子 但是啊这样一来 A社就会从一个轻资产的公司 变成一个重资产的公司
+那数据中心的折旧 租赁负债就会都进入A社的财报 利润和现金流呢也会被这些项目拖累 而这也是又一个早点上市的理由
+所以市场上面传的A社1.5万亿的估值 到底是虚胖还是物有所值呢 1.5万亿是什么概念啊 它是A社在过去12个月营收的43倍
+差不多是荷兰一整年的GDP 也比他的老对手OpenAI 最新一轮的1.25万亿估值还要高 纽约大学有个估值教授
+对于A社的估值手搓了一个DCF模型 那他算出来 A社的估值如果要达到1.475万亿的话 那么A社在31年左右营收就必须得追上alphabet
+也就是谷歌的母公司去年一整年的规模 甚至10年后到36年 A社的营收得达到alphabet的两倍半 所以说啊按1.5万亿以上的价格买入A社
+这家公司 相当于默认10年之后A社能稳坐行业老大 那这也是为什么 他花了那么大的代价来锁算力啊
+你的算力锁得越多 模型才可能越强 可账单也会越积越高 就需要更高的估值来匹配
+而更更底层的风险其实在于缩放定律本身 也就是说算力越足 模型能力越强 真的会永远成立吗
+A社的招股书里面也承认啊 缩放定律在更大的规模上可能会停滞减弱 或者说根本不存在 也就是说A社压铸的信仰可能根本就不存在
+那说到这里啊 A社能不能一直当行业老大 这个呢咱们心中应该都有自己的判断 但问题是
+
+深水区
+[图片]
+
+如果他当了行业老大 他真的有自己说的那么安全吗 他的这种反华的意识形态 又会让世界有怎么样的变化呢
+要看懂A社到底是不是一家 真心注重安全的公司 我们可以先看看这家公司的方向盘 到底握在谁的手里
+他的股权结构啊非常的复杂 一共有五类股票 不过呢为理你就全都清楚了 首先呢又可以分红
+又可以投票的持有A类股一股一票 这次IPO散户买的也是这种股票 这就是最正常的股权结构 那其次呢有分红
+但是没有投票权的是N类股 那这些呢主要就是由像亚马逊 微软 谷歌这样的大厂合作方来认购的
+而剩下的都是没有钱 只有权的股票 那一个呢是F类 只有一股
+但是这一股它固定占全部投票权的5% 10.1 握在谁手里呢 A社的七位联合创始人
+就成立了一家叫创始人有限责任公司的机构 但这一股F股就握在这个创始人机构的手里 还有T类股啊 也是只有一票
+握在一个叫长期利益信托的机构手里 还有最后的异类股 上市之后呢才会发给员工 那具体什么时候发
+公司说上市之后再定 所以呢现在还是一个未知数 听起来是不是挺晕的 但是呢我给你稍微理一下
+你就不晕了 首先啊第一个重点 A社的散户投资者几乎没有任何的话语权 为什么这么说呢
+我们刚才说了 握在创始人公司手里的这一股F股 它固定占50.1%的投票权 也就是说以后不管再增发多少个股票
+这七个创始人都能在股东大会的投票中 占据多数 那说白了所有需要全体股东投票的事情 比如说公司要不要卖
+要不要跟别人合并 那这个创始人公司都能去卡住这个决定 那现在问题来了 一般来说
+一个公司的董事会是由全体的股东选出来的 那照这个结构 创始人公司拿着过半的投票权 不就可以直接选出A社的所有董事了吗
+那这肯定是不行的呀 所以啊A社有个单独的机构 就叫长期利益信托 那这个里面的受托人呢
+他不能持有任何AH的股票 所以呢表面上他们看起来更加的公允一点 这个信托唯一的目的呢 就是确保A社可以负责任的开发AI
+为人类的长期利益服务 然后这个信托里面的受托人 最大的权利就可以去选A社的董事 这些人呢可以确定性的选出七席
+董事会里面的三席 还可以提名第四席董事 不过这个第四席董事会的任命呢 还要过一个叫提名委员会的东西
+就是七位联合创始人之一的DANIELLA 也就是达里奥的亲妹妹 如果说这个提名委员会跟信托不能达成共识呢 就以持有异类股的员工投票为准
+但异类股反正现在也都还没发呢 而董事会剩下的三喜是由创始人公司来决定的 所以啊七席里面信托稳拿三席 创始人那边稳拿三席
+那董事会到底往哪边倒 就看第四席这一票 而这一票的人选呢 也可以被达里奥的妹妹
+领头的这个提名委员会给卡住 所以啊你应该感觉到了吧 这七个联合创始人组建的创始人公司 话语权非常的大
+更不要提在信托这个机构里面坐着的人 本来就是A社自己挑出来的 那招股书上也说了 到目前为止
+物色面试 挑选受托人都是现任的受托人 和A社的高管密切合作来完成的 那其他更加细枝末节的控制权呢
+这里我们也不谈了 不过呢你应该可以感受到A社内部的大小事 不管是模型够不够安全 能不能发布
+公司要不要卖 其实都能被这个创始人团队所卡住 那普通A类股东其实没什么话语权 创始人团队才是真正拍板的人
+而他们真的有自己说的那么重视安全吗 A社强调的安全呢主要来自于两样东西 一样是A社自驾模型cloud本身安不安全 像22年底啊
+A社就率先开启了一份 用宪法来训练和约束模型言行的做法 第一呢要配合人类对他的监督 而且不管有没有人在监督
+都得保持言行一致 那第二呢要有好的品格 不能不恰当地伤害人类 第三要遵守A社自己定的具体规矩
+那最后才是对用户有帮助 不过呢现在每家的做法其实很接近了 OpenAI在24年也发布了成文的模型规范 而在约束这个模型之外啊
+A社还有一份被奉为盛典的文件 叫rs p负责任的扩展政策 在23年的第一版里 这份文件就说了
+如果模型的能力跑到了安全措施的前面 那A社呢就会暂停训练更强的模型 但是之后随着A社自己的模型能力越来越强 那这份RSP文件呢就被改的越来越宽松
+在今年A社自己的世界级黑客模型 METHOS出来的前两个月 RSP里面 关于安全措施跟不上
+就暂停训练的这条就直接被删了 改成了只要自家的模型不比别人的模型更危险 那就可以发布 那等于说是啊
+如果别人已经发布了步枪级别威力的模型 只要A社自己手里的模型 也是一把差不多的步枪 而不是一枚导弹
+那A社经过董事会和信托批准之后呢 就可以去发布这个模型 看上去稍微有点虚伪啊 但其实呢如果你从正面来看
+A社 他其实也有为自己的安全红线 付出过真金白银的代价 比如说跟美国五角大楼的斗争
+以及说按住METHOS步伐 都带来了一定程度上的金钱损失 总的来说呢 至少A社在表面上还是更加注重安全的
+这其实是因为啊 A社的很多核心创始人加投资人 都跟一个叫ea的小圈子有很深的渊源 Ea effective altruism
+有效利他主义 它起源于牛津大学 但是在硅谷的影响力那就大的吓人 那这个运动的主张呢
+就是我怎么样才能最有效的利用我的才 能 我的钱 我的时间去帮人类去解决重大问题
+而这个组织得出的结论就是非常有争议啊 就是搞金融的人可能比社工对社会的贡献更大 因为搞金融呢你可以赚的更多 然后呢你可以把你赚到的钱捐出去
+可能这可以养活100个社工 于是呢他们就发起了一个叫做一辈子 至少捐出收入10%的誓约 在A社的创始人达里奥联创jack clark
+还有被称为cloud的妈妈的哲学家AMANDA 都签了这个ea的誓约 而A社内部主笔RSP的HOLDEN也是达里奥的妹夫 在ea的圈里呢也是元老级的人物
+同时啊ea圈也是AI末日论的主要推手之一 所以他又号召捐钱 又讲末日论 又是个小圈子
+那当年A社融A轮的时候呢 领头的john和跟头的DUSTIN都是ea h的大金主 到了B轮ea圈的明星代表 加密货币交易所FTX的创始人
+一个人就投了B轮的86% 不过呢在FTX暴雷之后 ea的名声一下子就变臭了很多 那A社呢也在淡化和ea的联系
+后续在媒体上更多被报道的是ea 跟宗教界打交道的活动 比如今年的3月底啊 A社就邀请了15位天主教和新教人士
+在他旧金山的总部呢开了两天闭门会 就探讨cloud到底算不算上帝的孩子呢 甚至很多A社的内部员工会说 达里奥每两周开例会的时候
+其实更像是在布道 那当然啊 那当年的苹果呢也被这样说过 但是现在的A社造的不是一个冰冷的硬件啊
+而是一个每个月要跟2亿4000万人对话 能说会道 有价值观的东西 那这种规模的步道真的是安全的吗
+一群真心相信AI可能会毁灭人类的人 决定亲自把它造的更强 而替他们买单的人正在从供应商换成股民 A社招股书正文的第一句写着
+人类历史上第一次智能成为一样 人能造出来的东西 而后果是什么呢</article></div>
+<div class="workspace-help">章节按钮会定位到对应标题。页面上的“[图片]”是逐字稿原有占位标记。</div>
+</div>
+<div class="panel">
+<div class="chart-title"><b>评论</b><span class="sub" id="comment-count">0 条</span></div>
+<div class="workspace-toolbar">
+<button class="workspace-btn primary" id="export-comments-btn" type="button">导出批注 JSON</button>
+<button class="workspace-btn" id="import-comments-btn" type="button">导入批注 JSON</button>
+<input class="source-file" id="comments-file" type="file" accept=".json,application/json">
+<button class="workspace-btn" id="copy-summary-btn" type="button">复制反馈摘要</button>
+<span class="workspace-status" id="save-status">正在读取本地评论</span>
+</div>
+<div class="workspace-help">导出文件包含原文摘录和你的评论，不包含整份逐字稿。下一轮把 JSON 发给我即可。</div>
+<div id="comment-composer" class="comment-composer" hidden>
+<b style="font-size:13px">添加评论</b>
+<div class="quote-box" id="selected-quote"></div>
+<textarea class="comment-input" id="comment-input" placeholder="写下你希望补充、调整或可视化的内容……"></textarea>
+<div class="workspace-toolbar" style="margin-bottom:0">
+<button class="workspace-btn primary" id="save-comment-btn" type="button">发布评论</button>
+<button class="workspace-btn" id="cancel-comment-btn" type="button">取消</button>
+</div>
+</div>
+<div id="comments-list" class="comment-list"><div class="empty-comments">选中逐字稿中的一段文字，然后点击旁边出现的“添加评论”。</div></div>
+</div>
+</div>
+<button class="workspace-btn primary selection-comment-btn" id="selection-comment-btn" type="button">＋ 添加评论</button>
+</section>
+</div>
+</main>
+
+<script>
+(()=> {
+ const tabs=[...document.querySelectorAll('[data-tab]')];
+ tabs.forEach(btn=>btn.addEventListener('click',()=>{
+   tabs.forEach(b=>b.classList.toggle('active',b===btn));
+   document.querySelectorAll('.tab-panel').forEach(panel=>panel.hidden=panel.id!==btn.dataset.tab);
+   window.scrollTo({top:0,behavior:'smooth'});
+ }));
+ const KEY='anthropic_ipo_transcript_workspace_v1';
+ const reader=document.getElementById('transcript-reader');
+ const transcriptText=reader.textContent;
+ const list=document.getElementById('comments-list');
+ const composer=document.getElementById('comment-composer');
+ const quoteEl=document.getElementById('selected-quote');
+ const noteEl=document.getElementById('comment-input');
+ const status=document.getElementById('save-status');
+ const floating=document.getElementById('selection-comment-btn');
+ const commentFile=document.getElementById('comments-file');
+ let comments=[];
+ let pending=null;
+ let editingId=null;
+ let saveTimer=null;
+ document.getElementById('transcript-count').textContent=transcriptText.length.toLocaleString();
+ try {
+   const saved=JSON.parse(localStorage.getItem(KEY)||'null');
+   if(saved&&Array.isArray(saved.comments)) comments=saved.comments;
+   status.textContent=saved?'已恢复本浏览器评论':'评论将自动保存在当前浏览器';
+ } catch(e) { status.textContent='浏览器无法自动保存；请导出批注'; }
+ const safeStore=()=>{
+   try { localStorage.setItem(KEY,JSON.stringify({comments,transcriptInitialized:true}));status.textContent='评论已保存在当前浏览器'; }
+   catch(e) { status.textContent='浏览器未允许本地保存；请导出批注'; }
+ };
+ const persistSoon=()=>{clearTimeout(saveTimer);saveTimer=setTimeout(safeStore,350);};
+ const download=(name,data,type)=>{
+   const blob=new Blob([data],{type});const url=URL.createObjectURL(blob);
+   const a=document.createElement('a');a.href=url;a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);
+ };
+ const chapterRanges=[];
+ const chapterPattern=/^(起源|缩放定律|供应商融资|估值|深水区)$/gm;
+ let chapterMatch;
+ while((chapterMatch=chapterPattern.exec(transcriptText))!==null) chapterRanges.push({start:chapterMatch.index,end:chapterMatch.index+chapterMatch[0].length});
+ const imageRanges=[];
+ const imagePattern=/\[图片\]/g;
+ let imageMatch;
+ while((imageMatch=imagePattern.exec(transcriptText))!==null) imageRanges.push({start:imageMatch.index,end:imageMatch.index+imageMatch[0].length});
+ const renderTranscript=()=>{
+   const bounds=new Set([0,transcriptText.length]);
+   const valid=comments.filter(c=>Number.isInteger(c.start)&&Number.isInteger(c.end)&&c.start>=0&&c.end>c.start&&c.end<=transcriptText.length);
+   [...valid,...chapterRanges,...imageRanges].forEach(x=>{bounds.add(x.start);bounds.add(x.end);});
+   const points=[...bounds].sort((a,b)=>a-b);const frag=document.createDocumentFragment();
+   for(let i=0;i<points.length-1;i++){
+     const a=points[i],b=points[i+1];if(b<=a)continue;
+     const txt=transcriptText.slice(a,b);
+     const active=valid.filter(c=>c.start<=a&&c.end>=b);
+     const isHeading=chapterRanges.some(x=>x.start<=a&&x.end>=b);
+     const isImage=imageRanges.some(x=>x.start<=a&&x.end>=b);
+     if(!active.length&&!isHeading&&!isImage){frag.append(document.createTextNode(txt));continue;}
+     const span=document.createElement('span');
+     if(active.length){span.classList.add('annotation-highlight');span.dataset.commentIds=active.map(c=>c.id).join(',');}
+     if(isHeading)span.classList.add('transcript-chapter-title');
+     if(isImage)span.classList.add('transcript-image-placeholder');
+     span.textContent=txt;frag.append(span);
+   }
+   reader.replaceChildren(frag);
+ };
+ const renderComments=()=>{
+   document.getElementById('comment-count').textContent=comments.length+' 条';
+   list.replaceChildren();
+   if(!comments.length){const empty=document.createElement('div');empty.className='empty-comments';empty.textContent='选中逐字稿中的一段文字，然后点击旁边出现的“添加评论”。';list.append(empty);return;}
+   comments.forEach((c,i)=>{
+     const item=document.createElement('div');item.className='comment-item';item.id='comment-'+c.id;
+     const quote=document.createElement('blockquote');quote.textContent='“'+c.quote+'”';
+     const body=document.createElement('p');body.textContent=c.note;
+     const actions=document.createElement('div');actions.className='comment-actions';
+     const locate=document.createElement('button');locate.className='workspace-btn';locate.type='button';locate.textContent='定位原文';
+     locate.addEventListener('click',()=>selectComment(c,item));
+     const edit=document.createElement('button');edit.className='workspace-btn';edit.type='button';edit.textContent='编辑评论';
+     edit.addEventListener('click',()=>{editingId=c.id;pending={start:c.start,end:c.end,quote:c.quote};quoteEl.textContent='“'+c.quote+'”';noteEl.value=c.note;composer.hidden=false;noteEl.focus();});
+     const remove=document.createElement('button');remove.className='workspace-btn danger';remove.type='button';remove.textContent='删除评论';
+     remove.addEventListener('click',()=>{comments.splice(i,1);renderTranscript();renderComments();safeStore();});
+     actions.append(locate,edit,remove);item.append(quote,body,actions);list.append(item);
+   });
+ };
+ const pointAt=(offset)=>{
+   const walker=document.createTreeWalker(reader,NodeFilter.SHOW_TEXT);
+   let node,passed=0,last=null;
+   while((node=walker.nextNode())){
+     last=node;const n=node.nodeValue.length;
+     if(offset<=passed+n)return {node,offset:offset-passed};
+     passed+=n;
+   }
+   return last?{node:last,offset:last.nodeValue.length}:null;
+ };
+ const rangeAt=(start,end)=>{
+   const a=pointAt(start),b=pointAt(end);if(!a||!b)return null;
+   const range=document.createRange();range.setStart(a.node,a.offset);range.setEnd(b.node,b.offset);return range;
+ };
+ const selectComment=(c,item)=>{
+   renderTranscript();
+   const range=rangeAt(c.start,c.end);
+   if(range){const sel=window.getSelection();sel.removeAllRanges();sel.addRange(range);range.startContainer.parentElement?.scrollIntoView({behavior:'smooth',block:'center'});}
+   document.querySelectorAll('.comment-item.active').forEach(x=>x.classList.remove('active'));
+   item.classList.add('active');item.scrollIntoView({behavior:'smooth',block:'nearest'});
+ };
+ const globalOffset=(node,offset)=>{
+   const range=document.createRange();range.selectNodeContents(reader);range.setEnd(node,offset);return range.toString().length;
+ };
+ const captureSelection=()=>{
+   const selection=window.getSelection();
+   if(!selection||selection.isCollapsed||!selection.rangeCount){floating.style.display='none';return;}
+   const range=selection.getRangeAt(0);
+   const inReader=n=>n===reader||reader.contains(n);
+   if(!inReader(range.startContainer)||!inReader(range.endContainer)){floating.style.display='none';return;}
+   const start=globalOffset(range.startContainer,range.startOffset),end=globalOffset(range.endContainer,range.endOffset);
+   if(end<=start){floating.style.display='none';return;}
+   pending={start,end,quote:transcriptText.slice(start,end)};
+   const rect=range.getBoundingClientRect();
+   floating.style.left=Math.max(8,Math.min(window.innerWidth-145,rect.left+rect.width/2-70))+'px';
+   floating.style.top=Math.max(8,Math.min(window.innerHeight-48,rect.bottom+8))+'px';
+   floating.style.display='block';
+ };
+ document.addEventListener('selectionchange',()=>setTimeout(captureSelection,30));
+ reader.addEventListener('mouseup',captureSelection);
+ reader.addEventListener('keyup',captureSelection);
+ floating.addEventListener('mousedown',e=>e.preventDefault());
+ floating.addEventListener('click',()=>{
+   if(!pending)return;
+   quoteEl.textContent='“'+pending.quote+'”';noteEl.value='';composer.hidden=false;floating.style.display='none';noteEl.focus();
+ });
+ document.getElementById('save-comment-btn').addEventListener('click',()=>{
+   const note=noteEl.value.trim();if(!note){alert('请先写下评论。');return;}
+   if(editingId){const existing=comments.find(c=>c.id===editingId);if(existing){existing.note=note;existing.updatedAt=new Date().toISOString();}}
+   else comments.push({id:(globalThis.crypto&&crypto.randomUUID)?crypto.randomUUID():String(Date.now()),start:pending.start,end:pending.end,quote:pending.quote,note,createdAt:new Date().toISOString()});
+   editingId=null;pending=null;composer.hidden=true;renderTranscript();renderComments();safeStore();
+ });
+ document.getElementById('cancel-comment-btn').addEventListener('click',()=>{composer.hidden=true;pending=null;editingId=null;});
+ document.querySelectorAll('[data-chapter]').forEach(btn=>btn.addEventListener('click',()=>{
+   const title=btn.dataset.chapter;let start=transcriptText.indexOf('\n'+title+'\n');
+   if(start<0&&transcriptText.startsWith(title+'\n'))start=0;else if(start>=0)start+=1;
+   if(start<0){alert('没有找到章节：'+title);return;}
+   const range=rangeAt(start,start+title.length);
+   if(range){const sel=window.getSelection();sel.removeAllRanges();sel.addRange(range);range.startContainer.parentElement?.scrollIntoView({behavior:'smooth',block:'center'});}
+ }));
+ reader.addEventListener('click',e=>{
+   const mark=e.target.closest('[data-comment-ids]');if(!mark)return;
+   const id=mark.dataset.commentIds.split(',')[0];document.getElementById('comment-'+id)?.scrollIntoView({behavior:'smooth',block:'center'});
+   document.querySelectorAll('.comment-item.active').forEach(x=>x.classList.remove('active'));document.getElementById('comment-'+id)?.classList.add('active');
+ });
+ document.getElementById('export-comments-btn').addEventListener('click',()=>{
+   const payload={format:'anthropic-ipo-transcript-feedback',version:1,exportedAt:new Date().toISOString(),comments};
+   download('anthropic-html-feedback.json',JSON.stringify(payload,null,2),'application/json');
+ });
+ document.getElementById('import-comments-btn').addEventListener('click',()=>commentFile.click());
+ commentFile.addEventListener('change',async()=>{
+   const f=commentFile.files&&commentFile.files[0];if(!f)return;
+   try{const data=JSON.parse(await f.text());if(!Array.isArray(data.comments))throw new Error('invalid');
+     const ids=new Set(comments.map(c=>c.id));data.comments.forEach(c=>{if(c&&typeof c.note==='string'&&typeof c.quote==='string'&&!ids.has(c.id))comments.push(c);});
+     renderTranscript();renderComments();safeStore();alert('批注已导入。');
+   }catch(e){alert('无法识别这个批注 JSON 文件。');}
+   commentFile.value='';
+ });
+ document.getElementById('copy-summary-btn').addEventListener('click',async()=>{
+   const summary=comments.map((c,i)=>String(i+1)+'. 原文摘录：'+c.quote+'\n   修改建议：'+c.note).join('\n\n');
+   try{await navigator.clipboard.writeText(summary||'还没有批注。');alert('反馈摘要已复制。');}
+   catch(e){download('anthropic-html-feedback.md',summary,'text/markdown;charset=utf-8');}
+ });
+ renderTranscript();renderComments();
+})();
+</script>
+
+</body></html>
